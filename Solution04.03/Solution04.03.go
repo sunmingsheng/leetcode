@@ -38,6 +38,7 @@ type ListNode struct {
     Next *ListNode
 }
 
+//思路:树的层序遍历
 func main() {
 	head := TreeNode{Val:1}
 	right := TreeNode{Val:2}
