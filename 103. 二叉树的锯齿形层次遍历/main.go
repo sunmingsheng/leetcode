@@ -37,7 +37,7 @@ func main() {
 
 func zigzagLevelOrder(root *TreeNode) [][]int {
 	m := make(map[int]*[]int)
-	levelPrint(root, m, 0, false)
+	levelPrint(root, m, 0, true)
 	s := make([][]int, len(m))
 	for key, items := range m {
 		s[key] = *items
@@ -63,3 +63,5 @@ func levelPrint(node *TreeNode, m map[int]*[]int, level int, flag bool) {
 		levelPrint(node.Left, m, level+1, true)
 	}
 }
+
+//广度优先遍历和深度优先遍历
