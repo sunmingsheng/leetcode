@@ -17,7 +17,6 @@ import "fmt"
 //链接：https://leetcode-cn.com/problems/sort-list
 //著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
-
 type ListNode struct {
 	Val  int
 	Next *ListNode
@@ -39,8 +38,8 @@ func sortList(head *ListNode) *ListNode {
 	p1 := sortList(head)
 	p2 := sortList(middleNode)
 	//合并p1 p2
-	newHead := &ListNode{Val:-1}
-	p := newHead
+	dummyHead := &ListNode{Val:-1}
+	p := dummyHead
 	//返回结果
 	for p1 != nil && p2 != nil {
 		if p1.Val < p2.Val {
@@ -58,9 +57,10 @@ func sortList(head *ListNode) *ListNode {
 	if p2 != nil {
 		p.Next = p2
 	}
-	return newHead.Next
+	return dummyHead.Next
 }
 
+//快慢指针遍历链表
 func findMiddleNode(head *ListNode) *ListNode {
 	slow := head
 	fast := head
