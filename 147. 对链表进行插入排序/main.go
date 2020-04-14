@@ -41,19 +41,28 @@ func main() {
 }
 
 func insertionSortList(head *ListNode) *ListNode {
-	dummyHead := ListNode{Val:-1}
-	dummyHead.Next = head
-	pre := &dummyHead
-	for head != nil && head.Next != nil {
-		if head.Val > head.Next.Val {
-			node := head.Next
-			head.Next = node.Next
-			node.Next = head
-			pre.Next = node
-		} else {
-			pre = pre.Next
+	dummyHead := &ListNode{Val:-1}
+	node := head
+	for node != nil {
+		orderNode := dummyHead
+		for orderNode != nil {
+			if orderNode.Val <= node.Val {
+				if orderNode.Next == nil {
+					orderNode.Next = node
+					break
+				} else {
+					if orderNode.Next.Val <= node.Val {
+						orderNode = orderNode.Next
+					} else {
+						temp := orderNode.Next
+						node.Next = temp
+						orderNode.Next = temp
+						break
+					}
+				}
+			}
 		}
-		head = head.Next
+		node = node.Next
 	}
 	return dummyHead.Next
 }
