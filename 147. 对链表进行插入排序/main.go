@@ -34,10 +34,15 @@ type ListNode struct {
 }
 
 func main() {
-	head := ListNode{Val:5}
+	head := ListNode{Val:4}
 	head.Next = &ListNode{Val:2}
-	head.Next.Next = &ListNode{Val:3}
-	fmt.Println(insertionSortList(&head))
+	head.Next.Next = &ListNode{Val:1}
+	head.Next.Next.Next = &ListNode{Val:3}
+	result := insertionSortList(&head)
+	fmt.Println(result)
+	fmt.Println(result.Next)
+	fmt.Println(result.Next.Next)
+	fmt.Println(result.Next.Next.Next)
 }
 
 func insertionSortList(head *ListNode) *ListNode {
@@ -49,20 +54,22 @@ func insertionSortList(head *ListNode) *ListNode {
 			if orderNode.Val <= node.Val {
 				if orderNode.Next == nil {
 					orderNode.Next = node
+					node = node.Next
 					break
 				} else {
 					if orderNode.Next.Val <= node.Val {
 						orderNode = orderNode.Next
 					} else {
 						temp := orderNode.Next
+						tempNode := node.Next
 						node.Next = temp
-						orderNode.Next = temp
+						orderNode.Next = node
+						node = tempNode
 						break
 					}
 				}
 			}
 		}
-		node = node.Next
 	}
 	return dummyHead.Next
 }
