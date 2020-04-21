@@ -49,22 +49,17 @@ func sortedListToBST(head *ListNode) *TreeNode {
 	fastNode := head
 	slowNode := head
 	prevNode := head
-	//-10, -3, 0, 5, 9
+	//-10, -3, 0, 5, 9, 10
 	for fastNode != nil && fastNode.Next != nil {
 		fastNode = fastNode.Next.Next
 		prevNode = slowNode
 		slowNode = slowNode.Next
 	}
-	middleNode := &ListNode{}
-	if slowNode.Next == nil {
-		middleNode = slowNode
+	middleNode := slowNode
+	prevNode.Next = nil
+	if prevNode != nil {
 		prevNode.Next = nil
-	} else {
-		middleNode = slowNode.Next
-		slowNode.Next = nil
 	}
-
-    //中间节点是slowNode.next
     node := &TreeNode{
 		Val:   middleNode.Val,
 		Left:  sortedListToBST(head),
