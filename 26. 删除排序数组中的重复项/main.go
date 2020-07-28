@@ -46,6 +46,8 @@ func removeDuplicates(nums []int) int {
 		s = append(s, key)
 	}
 	sort.Ints(s)
-	nums = s
+	for key, value := range s {
+		nums[key] = value
+	}
 	return len(s)
 }
