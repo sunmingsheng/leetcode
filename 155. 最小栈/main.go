@@ -35,49 +35,67 @@ import "fmt"
 
 type MinStack struct {
 	data []int
+	minData []int
 	length int
-	minValue int
-	minIndex int
 }
 
 
 /** initialize your data structure here. */
 func Constructor() MinStack {
 	return MinStack{
-		data:     []int{},
+		data:   []int{},
+		minData: []int{},
 		length:   0,
-		minValue: 0,
-		minIndex: -1,
 	}
 }
 
 
 func (this *MinStack) Push(x int)  {
 	this.data = append(this.data, x)
-	this.length += 1
-	if x < this.minValue {
-		this.minValue =
+	if this.length == 0 {
+		this.minData = append(this.minData, x)
+	} else {
+		if x < this.minData[this.length - 1] {
+			this.minData = append(this.minData, x)
+		} else {
+			this.minData = append(this.minData, this.minData[this.length - 1])
+		}
 	}
+	this.length += 1
 }
 
 
 func (this *MinStack) Pop()  {
-
+	if this.length > 0 {
+		this.data = this.data[0:this.length-1]
+		this.minData = this.minData[0:this.length-1]
+		this.length -= 1
+	}
 }
 
 
 func (this *MinStack) Top() int {
-
+	if this.length > 0 {
+		return this.data[this.length-1]
+	}
+	return -1
 }
 
 
 func (this *MinStack) GetMin() int {
-
+	if this.length > 0 {
+		return this.minData[this.length-1]
+	}
+	return -1
 }
 
 func main() {
-	obj := Constructor();
+	obj := Constructor()
+	obj.Push(0)
+	obj.Push(3)
+	obj.Push(4)
 	obj.Push(1)
+	obj.Push(2)
 	obj.Pop()
 	fmt.Println(obj.Top())
 	fmt.Println(obj.GetMin())

@@ -8,7 +8,7 @@ import (
 //
 //示例：
 //
-//输入: S = "ADOBECODEBANC", T = "ABC"
+//输入: S = "ADOBEC ODEBANC", T = "ABC"
 //输出: "BANC"
 //说明：
 //
@@ -42,8 +42,12 @@ func minWindow(s string, t string) string {
 	tLen := len(t)
 	res  := ""
 	bakMap := getM(t)
-	for i := 0; i < sLen - tLen + 1; i++ {
-		for j := i + tLen - 1; j < sLen; j++ {
+	j := 0
+	for i := 0 ; i < sLen - tLen + 1; i++ {
+		if i + tLen - 1 > j {
+			j = i + tLen - 1
+		}
+		for ; j < sLen; j++ {
 			m := make(map[string]int)
 			for z := i; z <= j; z++ {
 				str := s[z:z+1]
