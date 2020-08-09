@@ -21,9 +21,39 @@ import "fmt"
 //著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 func main() {
-	fmt.Println(integerBreak(2))
+	fmt.Println(integerBreak(10))
 }
 
 func integerBreak(n int) int {
+	data := make(map[int]int)
+	return integerBreak_(n, data)
+}
 
+func integerBreak_(n int, data map[int]int) int {
+	if n == 1 {
+		return 1
+	}
+	if n == 2 {
+		return 1
+	}
+	if value, ok := data[n]; ok {
+		return value
+	}
+	res := -1
+	for i := 1; i <= n - 1; i++ {
+		res = max3(res, i * (n-i), i * integerBreak_(n-i, data))
+	}
+	data[n] = res
+	return res
+}
+
+func max3(a, b, c int) int {
+	temp := a
+	if a < b {
+		temp = b
+	}
+	if temp > c {
+		return temp
+	}
+	return c
 }
