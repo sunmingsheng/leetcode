@@ -48,15 +48,16 @@ func detectCycle(head *ListNode) *ListNode {
 	if head == nil {
 		return nil
 	}
-	//快慢指针
-	fast := head
-	slow := head
-	for fast != nil && fast.Next != nil && slow != nil {
-		fast = fast.Next.Next
-		slow = slow.Next
-		if fast == slow {
-			return fast
+	m := make(map[*ListNode]struct{})
+	node := head
+	for {
+		if node == nil {
+			return nil
 		}
+		if _, ok := m[node]; ok {
+			return node
+		}
+		m[node] = struct{}{}
+		node = node.Next
 	}
-	return nil
 }

@@ -24,7 +24,36 @@ import "fmt"
 //著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 func main() {
-	fmt.Println("结果:", mySqrt(4))
+	fmt.Println("结果:", mySqrt(6))
+}
+// 0 1 2 3 4 5 6 7 8
+//         4
+// 0 1 2 3
+
+func mySqrt(x int) int {
+	if x <= 1 {
+		return x
+	}
+	l := 0
+	r := x
+	ans := 0
+	for {
+		if l > r {
+			break
+		}
+		middle := l + (r - l) / 2
+		result := middle * middle
+		if result == x {
+			return middle
+		}
+		if result > x {
+			r = middle - 1
+			ans = r
+		} else {
+			l = middle + 1
+		}
+	}
+	return ans
 }
 
 //func mySqrt(x int) int {
@@ -43,26 +72,26 @@ func main() {
 //	return 0
 //}
 
-func mySqrt(x int) int {
-	if x <= 1 {
-		return x
-	}
-	l := 0
-	r := x
-	middle := 0
-	ans := 0
-	for l <= r {
-		middle = l + (r - l) / 2
-		res := middle * middle
-		if res == x {
-			return middle
-		}
-		if res > x {
-			r = middle - 1
-			ans = middle - 1
-		} else {
-			l = middle + 1
-		}
-	}
-	return ans
-}
+//func mySqrt(x int) int {
+//	if x <= 1 {
+//		return x
+//	}
+//	l := 0
+//	r := x
+//	middle := 0
+//	ans := 0
+//	for l <= r {
+//		middle = l + (r - l) / 2
+//		res := middle * middle
+//		if res == x {
+//			return middle
+//		}
+//		if res > x {
+//			r = middle - 1
+//			ans = middle - 1
+//		} else {
+//			l = middle + 1
+//		}
+//	}
+//	return ans
+//}
