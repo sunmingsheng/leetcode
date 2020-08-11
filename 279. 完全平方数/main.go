@@ -22,5 +22,7 @@ func main() {
 }
 
 func numSquares(n int) int {
+	for i := n; i > 0; i-- {
 
+	}
 }

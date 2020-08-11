@@ -25,26 +25,15 @@ func main() {
 }
 
 func integerBreak(n int) int {
-	data := make(map[int]int)
-	return integerBreak_(n, data)
-}
-
-func integerBreak_(n int, data map[int]int) int {
-	if n == 1 {
-		return 1
+	dp := make([]int, n + 1)
+	for i := 2; i <= n; i++ {
+		max := -1
+		for j := 1; j < i; j++ {
+			max = max3(max, j * (i - j), j * dp[i - j])
+		}
+		dp[i] = max
 	}
-	if n == 2 {
-		return 1
-	}
-	if value, ok := data[n]; ok {
-		return value
-	}
-	res := -1
-	for i := 1; i <= n - 1; i++ {
-		res = max3(res, i * (n-i), i * integerBreak_(n-i, data))
-	}
-	data[n] = res
-	return res
+	return dp[n]
 }
 
 func max3(a, b, c int) int {
@@ -57,3 +46,27 @@ func max3(a, b, c int) int {
 	}
 	return c
 }
+
+//func integerBreak(n int) int {
+//	data := make(map[int]int)
+//	return integerBreak_(n, data)
+//}
+//
+//func integerBreak_(n int, data map[int]int) int {
+//	if n == 1 {
+//		return 1
+//	}
+//	if n == 2 {
+//		return 1
+//	}
+//	if value, ok := data[n]; ok {
+//		return value
+//	}
+//	res := -1
+//	for i := 1; i <= n - 1; i++ {
+//		res = max3(res, i * (n-i), i * integerBreak_(n-i, data))
+//	}
+//	data[n] = res
+//	return res
+//}
+//
