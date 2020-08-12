@@ -2,14 +2,13 @@ package main
 
 import (
 	"fmt"
-	"math"
 )
 
 //给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
 //
 //示例 1:
 //
-//输入: "abcabcbb"
+//输入: "abcabcbb" i = 3 j = 0 z = 2
 //输出: 3
 //解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
 //示例 2:
@@ -26,24 +25,42 @@ import (
 
 func main() {
 	//abcabcbb
-	//一次遍历
-	//当遍历到index=3时，该位置上的数据之前已经存在过，则start = 原本出现的位置 + 1
-	fmt.Println(lengthOfLongestSubstring("tmmzuxt"))
+	fmt.Println(lengthOfLongestSubstring("aab"))
 }
 
 //窗口滑动法
 func lengthOfLongestSubstring(s string) int {
-	result := 0
-	start := 0
-	m := make(map[rune]int)
-	for key, value := range []rune(s) {
-		index, ok := m[value]
-		if ok && index >= start { //index >= start这个判断很关键
-			start = index + 1
-		}
-		result = int(math.Max(float64(result), float64(key - start + 1)))
-		m[value] = key
+	length := len(s)
+	if length <= 1 {
+		return  length
 	}
-	return result
+	max := 0
+	i   := 0
+	j   := 0
+	for ; i < length; i++ {
+		if i > j {
+			if i - j + 1 < max {
+				continue
+			}
+			m := make(map[string]int)
+			for z := j; z <= i; z++ {
+				temp := s[z:z+1]
+				if _, ok := m[temp]; ok {
+					//计算当前长度
+					if z - j > max {
+						max = z - j
+					}
+					j ++
+					break
+				} else {
+					if z - j + 1 > max {
+						max = z - j + 1
+					}
+					m[temp] = 1
+				}
+			}
+		}
+	}
+	return max
 }
 

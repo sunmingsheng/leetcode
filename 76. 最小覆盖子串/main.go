@@ -8,7 +8,7 @@ import (
 //
 //示例：
 //
-//输入: S = "ADOBEC ODEBANC", T = "ABC"
+//输入: S = "ADOBECODEBANC", T = "ABC"
 //输出: "BANC"
 //说明：
 //
@@ -26,31 +26,53 @@ func main() {
 }
 
 func minWindow(s string, t string) string {
+	res := ""
 	l1 := len(s)
 	l2 := len(t)
-	if l1 == 0 || l2 == 0 {
+	if l1 == 0 || l2 == 0 || l1 < l2 {
 		return ""
 	}
-	m1 := make(map[string]int)
+	m := make(map[string]int)
 	for i := 0; i < l2; i++ {
-		if _, ok := m1[t[i:i+1]]; !ok {
-			m1[t[i:i+1]] = 1
+		temp := t[i:i+1]
+		if _, ok := m[temp]; ok {
+			m[temp] += 1
 		} else {
-			m1[t[i:i+1]] += 1
+			m[temp] = 1
 		}
 	}
-	i := 0
-	for {
-		if i > l1 {
-			return ""
+	i, j := 0, 0
+	for ; i < l1; i++ {
+		if i <= j {
+			continue
 		}
-		if i + l2 - 1 > l1 {
-			return ""
+		tempM := make(map[string]int)
+		for z := j; z <= i; z++ {
+			if i - z + 1 < l2 {
+				continue
+			}
+			tempS := s[z:z+1]
+			if _, ok := tempM[tempS]; ok {
+				tempM[tempS] += 1
+			} else {
+				tempM[tempS] = 1
+			}
 		}
-		str := s[i:i+l2]
-
-		i = i + l2
+		flag := true
+		for key, value := range tempM {
+			if count, ok := m[key]; !ok || count < value {
+				flag = false
+				break
+			}
+		}
+		if flag {
+			//满足条件
+			if res != "" && len(s[j:i+1]) > len(res) {
+				res = s[j:i+1]
+			}
+		}
 	}
+	return res
 }
 
 //func getM(t string) map[string]int {

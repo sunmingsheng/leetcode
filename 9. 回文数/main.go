@@ -27,9 +27,8 @@ import (
 //著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 func main() {
-	fmt.Println(isPalindrome(121))
+	fmt.Println(isPalindrome(212))
 }
-
 
 func isPalindrome(x int) bool {
 	if x < 0 {
@@ -38,11 +37,23 @@ func isPalindrome(x int) bool {
 	if x == 0 {
 		return true
 	}
-	length := 0
+	data := []int{}
+	length := 1
 	for {
-		res := x / int(math.Pow10(length))
-		if res  == 0 {
+		if x / int(math.Pow10(length-1)) == 0 {
 			break
 		}
+		res := x % int(math.Pow10(length))
+		res = res / int(math.Pow10(length-1))
+		data = append(data, res)
+		length ++
 	}
+	length = len(data)
+	middle := length / 2
+	for i := 0; i < middle; i++ {
+		if data[i] != data[length - i - 1] {
+			return false
+		}
+	}
+	return true
 }
