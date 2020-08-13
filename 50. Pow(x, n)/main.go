@@ -27,9 +27,8 @@ import "fmt"
 //著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 func main()  {
-	fmt.Println(myPow(2, 10))
+	fmt.Println(myPow(2, 8))
 }
-
 
 func myPow(x float64, n int) float64 {
 	m := make(map[int]float64)
