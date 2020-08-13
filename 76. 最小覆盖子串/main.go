@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 )
 
 //给你一个字符串 S、一个字符串 T，请在字符串 S 里面找出：包含 T 所有字母的最小子串。
@@ -26,53 +27,45 @@ func main() {
 }
 
 func minWindow(s string, t string) string {
-	res := ""
-	l1 := len(s)
-	l2 := len(t)
-	if l1 == 0 || l2 == 0 || l1 < l2 {
+	need, window := map[byte]int{}, map[byte]int{}
+	for i := range t {
+		need[t[i]]++
+	}
+	left, right := 0, 0
+	valid := 0
+	index, length := 0, math.MaxInt32
+	for right < len(s) {
+		tempAdd := s[right]
+		right++
+
+		if _, ok := need[tempAdd]; ok {
+			window[tempAdd]++
+			if window[tempAdd] == need[tempAdd] {
+				valid++
+			}
+		}
+
+		for valid == len(need) {
+			if right-left < length {
+				index = left
+				length = right - left
+			}
+			tempDel := s[left]
+			left++
+
+			if _, ok := need[tempDel]; ok {
+				window[tempDel]--
+				if window[tempDel] < need[tempDel] {
+					valid--
+				}
+			}
+		}
+
+	}
+	if length == math.MaxInt32 {
 		return ""
 	}
-	m := make(map[string]int)
-	for i := 0; i < l2; i++ {
-		temp := t[i:i+1]
-		if _, ok := m[temp]; ok {
-			m[temp] += 1
-		} else {
-			m[temp] = 1
-		}
-	}
-	i, j := 0, 0
-	for ; i < l1; i++ {
-		if i <= j {
-			continue
-		}
-		tempM := make(map[string]int)
-		for z := j; z <= i; z++ {
-			if i - z + 1 < l2 {
-				continue
-			}
-			tempS := s[z:z+1]
-			if _, ok := tempM[tempS]; ok {
-				tempM[tempS] += 1
-			} else {
-				tempM[tempS] = 1
-			}
-		}
-		flag := true
-		for key, value := range tempM {
-			if count, ok := m[key]; !ok || count < value {
-				flag = false
-				break
-			}
-		}
-		if flag {
-			//满足条件
-			if res != "" && len(s[j:i+1]) > len(res) {
-				res = s[j:i+1]
-			}
-		}
-	}
-	return res
+	return s[index : index+length]
 }
 
 //func getM(t string) map[string]int {
