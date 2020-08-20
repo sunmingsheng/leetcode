@@ -24,7 +24,7 @@ import (
 //     请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
 
 func main() {
-	//abcabcbb
+	//abcdbcbb
 	fmt.Println(lengthOfLongestSubstring("aab"))
 }
 
@@ -34,33 +34,37 @@ func lengthOfLongestSubstring(s string) int {
 	if length <= 1 {
 		return  length
 	}
-	max := 0
-	i   := 0
-	j   := 0
-	for ; i < length; i++ {
-		if i > j {
-			if i - j + 1 < max {
-				continue
+	maxLength := 0
+	i,j := 0,0
+	set := []string{}
+	for ;i < length;i++ {
+		temp := s[i:i+1]
+		flag := checkHas(set, temp)
+		if !flag {
+			set = append(set, temp)
+			if maxLength < len(set) {
+				maxLength = len(set)
 			}
-			m := make(map[string]int)
-			for z := j; z <= i; z++ {
-				temp := s[z:z+1]
-				if _, ok := m[temp]; ok {
-					//计算当前长度
-					if z - j > max {
-						max = z - j
-					}
-					j ++
-					break
-				} else {
-					if z - j + 1 > max {
-						max = z - j + 1
-					}
-					m[temp] = 1
-				}
+		} else {
+			for checkHas(set, temp) {
+				set = set[1:]
+				j++
+			}
+			set = append(set, temp)
+			if maxLength < len(set) {
+				maxLength = len(set)
 			}
 		}
 	}
-	return max
+	return maxLength
+}
+
+func checkHas(set []string, target string) bool {
+	for _, value := range set {
+		if value == target {
+			return true
+		}
+	}
+	return false
 }
 
