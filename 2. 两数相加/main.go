@@ -1,7 +1,5 @@
 package main
 
-import "math"
-
 //给出两个 非空 的链表用来表示两个非负的整数。其中，它们各自的位数是按照 逆序 的方式存储的，并且它们的每个节点只能存储 一位 数字。
 //
 //如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。
@@ -28,73 +26,28 @@ func main() {
 }
 
 func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
-	head1 := l1
-	head2 := l2
-	list1 := []*ListNode{}
-	list2 := []*ListNode{}
-	flag1 := true
-	flag2 := true
-	for {
-		if !flag1 && !flag2 {
-			break
+	dummy := &ListNode{}
+	curry := dummy
+	lastVal := 0
+	for l1 != nil || l2 != nil {
+		value := 0
+		if l1 != nil {
+			value += l1.Val
+			l1 = l1.Next
 		}
-		if head1 != nil {
-			list1 = append(list1, head1)
-			head1 = head1.Next
-		} else {
-			flag1 = false
+		if l2 != nil {
+			value += l2.Val
+			l2 = l2.Next
 		}
-		if head2 != nil {
-			list2 = append(list2, head2)
-			head2 = head2.Next
-		} else {
-			flag2 = false
+		value += lastVal
+		curry.Next = &ListNode{
+			Val: value % 10,
 		}
+		lastVal = value / 10
+		curry = curry.Next
 	}
-	len1 := len(list1)
-	len2 := len(list2)
-	if len1 != len2 {
-		for len1 < len2 {
-			list1 = append(list1, &ListNode{Val:0})
-			len1 += 1
-		}
-		for len1 > len2 {
-			list2 = append(list2, &ListNode{Val:0})
-			len2 += 1
-		}
+	if lastVal > 0 {
+		curry.Next = &ListNode{Val:lastVal}
 	}
-	data := 0
-	for key, node := range list1 {
-		data += node.Val * int(math.Pow10(len(list1) - key - 1))
-	}
-	for key, node := range list2 {
-		data += node.Val * int(math.Pow10(len(list2) - key - 1))
-	}
-
-	results := []int{}
-	i := 1
-	for {
-		res := data % 10
-		results = append(results, res)
-		data -= res
-		data /= 10
-		if data < 0 {
-			break
-		}
-        i ++
-	}
-
-	root := &ListNode{
-		Val:  results[0],
-		Next: nil,
-	}
-	head := root
-	for i := 1; i < len(results); i++ {
-		head.Next = &ListNode{
-			Val:  results[i],
-			Next: nil,
-		}
-		head = head.Next
-	}
-	return root
+	return dummy.Next
 }
