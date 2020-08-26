@@ -25,46 +25,33 @@ import (
 
 func main() {
 	//abcdbcbb
-	fmt.Println(lengthOfLongestSubstring("aab"))
+	fmt.Println(lengthOfLongestSubstring("pwwkew1"))
 }
 
 //窗口滑动法
 func lengthOfLongestSubstring(s string) int {
 	length := len(s)
 	if length <= 1 {
-		return  length
+		return length
 	}
-	maxLength := 0
-	i,j := 0,0
-	set := []string{}
-	for ;i < length;i++ {
-		temp := s[i:i+1]
-		flag := checkHas(set, temp)
-		if !flag {
-			set = append(set, temp)
-			if maxLength < len(set) {
-				maxLength = len(set)
+	i, j, maxlength, m := 0, 0, 0, make(map[string]struct{})
+	for ; i < length; i++ {
+		if _, ok := m[s[i:i+1]]; !ok {
+			if i-j+1 > maxlength {
+				maxlength = i - j + 1
 			}
+			m[s[i:i+1]] = struct{}{}
 		} else {
-			for checkHas(set, temp) {
-				set = set[1:]
+			for {
+				if _, ok := m[s[i:i+1]]; !ok {
+					break
+				}
+				delete(m, s[j:j+1])
 				j++
 			}
-			set = append(set, temp)
-			if maxLength < len(set) {
-				maxLength = len(set)
-			}
+			m[s[i:i+1]] = struct{}{}
 		}
 	}
-	return maxLength
-}
-
-func checkHas(set []string, target string) bool {
-	for _, value := range set {
-		if value == target {
-			return true
-		}
-	}
-	return false
+	return maxlength
 }
 

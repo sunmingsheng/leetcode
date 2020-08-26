@@ -19,43 +19,37 @@ import "fmt"
 //著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 func main() {
-	fmt.Println(longestPalindrome("abacab"))
+	//两种模式 一种是aba 一种是baab
+	fmt.Println(longestPalindrome("aaaa"))
 }
 
 func longestPalindrome(s string) string {
 	length := len(s)
-	if length <= 1 {
+	if length < 2 {
 		return s
 	}
-	res := s[:1]
-	for i := 0; i < length; i++ {
-		for j := length - 1; j > i; j -- {
-			strLen := j - i + 1
-			if strLen <= len(res) {
-				continue
-			}
-			mid  := i + (j - i) / 2
-			strA := ""
-			strB := ""
-			if (j - i) % 2 == 0 { //奇数
-				strA = s[i:mid]
-				strB = s[mid+1:j+1]
-			}  else { //偶数
-				strA = s[i:mid+1]
-				strB = s[mid+1:j+1]
-			}
-			//fmt.Println(i, mid, j, strA, strB)
-			flag := true
-			for z := 0 ; z < len(strA); z ++ {
-				if strA[z] != strB[len(strA) - z - 1] {
-					flag = false
-					break
-				}
-			}
-			if flag {
-				res = s[i : j+1]
-			}
-		}
+	start := 0
+	maxLength := 1
+	for i := 0; i < len(s); i++ {
+		helper(s, i - 1, i + 1, &start, &maxLength)
+		helper(s, i, i + 1, &start, &maxLength)
 	}
-	return res
+	return s[start:start + maxLength]
+}
+
+func helper(s string, left , right int, start, maxLength *int) {
+	for {
+		if left < 0 || right >= len(s) {
+			return
+		}
+		if s[left] != s[right] {
+			return
+		}
+		if right - left + 1 > *maxLength {
+			*maxLength = right - left + 1
+			*start = left
+		}
+		left--
+		right++
+	}
 }
