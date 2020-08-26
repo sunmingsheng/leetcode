@@ -23,26 +23,25 @@ func main()  {
 }
 
 func findSubsequences(nums []int) [][]int {
-	length := len(nums)
-	res := [][]int{}
-	if length <= 1 {
-		return res
-	}
-	for i := 0; i < length - 1; i++ {
-		dfs(nums, &res, []int{})
-	}
+	res  := [][]int{}
+	dfs(nums, 0, &res, []int{})
 	return res
 }
 
-func dfs(nums []int, res *[][]int, result []int) {
-	length := len(nums)
-	if length <= 0 {
-		if len(result) >= 2 {
-			*res = append(*res, result)
-		}
-		return
+func dfs(nums []int, index int, res *[][]int, list []int) {
+	if len(list) >= 2 {
+		dest := make([]int, len(list))
+		copy(dest, list)
+		*res = append(*res, dest)
 	}
-	if len(result) == 0 {
-		result
+	m := make(map[int]struct{})
+	for i := index; i < len(nums); i++ {
+		if _, ok := m[nums[i]]; ok {
+			continue
+		}
+		if len(list) == 0 || nums[i] >= list[len(list)-1] {
+			m[nums[i]] = struct{}{}
+			dfs(nums, i+1, res, append(list, nums[i]))
+		}
 	}
 }

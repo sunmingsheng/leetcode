@@ -38,15 +38,39 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
+func main() {
+}
+
 func isSubStructure(A *TreeNode, B *TreeNode) bool {
-
-}
-
-func traversal(node *TreeNode, s *[]int) {
-	if node == nil {
-		return
+	if A == nil && B == nil {
+		return true
 	}
-	traversal(node.Left, s)
-	*s = append(*s, node.Val)
-	traversal(node.Right, s)
+	if A == nil || B == nil {
+		return false
+	}
+	result := false
+	if A.Val == B.Val {
+		result = helper(A, B)
+	}
+	if !result {
+		result = isSubStructure(A.Left, B)
+	}
+	if !result {
+		result = isSubStructure(A.Right, B)
+	}
+	return result
 }
+
+func helper(A *TreeNode, B *TreeNode) bool {
+	if B == nil {
+		return true
+	}
+	if A == nil && B != nil {
+		return false
+	}
+	if A.Val != B.Val {
+		return false
+	}
+	return helper(A.Right, B.Right) && helper(A.Left, B.Left)
+}
+
