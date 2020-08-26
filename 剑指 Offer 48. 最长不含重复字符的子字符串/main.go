@@ -28,9 +28,31 @@ import "fmt"
 //著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 func main() {
-	fmt.Println(lengthOfLongestSubstring(""))
+	fmt.Println(lengthOfLongestSubstring("pwwkew"))
 }
 
 func lengthOfLongestSubstring(s string) int {
-
+	length := len(s)
+	if length <= 1 {
+		return length
+	}
+	maxLength, i, j, m := 1, 0, 0, make(map[string]struct{})
+	for ; i < length; i++ {
+		if _, ok := m[s[i:i+1]]; !ok {
+			m[s[i:i+1]] = struct{}{}
+			if i - j + 1 > maxLength {
+				maxLength = i - j + 1
+			}
+		} else {
+			for {
+				if _, ok := m[s[i:i+1]]; !ok {
+					break
+				}
+				delete(m, s[j:j+1])
+				j++
+			}
+			m[s[i:i+1]] = struct{}{}
+		}
+	}
+	return maxLength
 }

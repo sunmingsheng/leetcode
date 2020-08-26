@@ -21,38 +21,30 @@ type ListNode struct {
 
 
 func main() {
-	head := &ListNode{Val:1, Next:&ListNode{Val:2, Next:&ListNode{Val:3}}}
+	head := &ListNode{Val:1, Next:&ListNode{Val:2, Next:&ListNode{Val:3,Next:&ListNode{Val:4}}}}
 	result := swapPairs(head)
 	fmt.Println(result)
 	fmt.Println(result.Next)
 	fmt.Println(result.Next.Next)
 }
 
-//1 2 3 4
+//0 1 2 3 4
 func swapPairs(head *ListNode) *ListNode {
 	if head == nil {
-		return nil
+		return head
 	}
-	s := []int{}
-	for head != nil {
-		s = append(s, head.Val)
-		head = head.Next
+	dummy := &ListNode{Next:head}
+	curr  := dummy
+	for {
+		if curr.Next == nil || curr.Next.Next == nil {
+			break
+		}
+		l1 := curr.Next
+		l2 := curr.Next.Next
+		l1.Next = l2.Next
+		l2.Next = l1
+		curr.Next = l2
+		curr = l1
 	}
-	length := len(s)
-	r := []int{}
-	if length % 2 == 1 {
-		r = s[0:length-1]
-	} else {
-		r = s
-	}
-	for i := 0; i < len(r); i+=2 {
-		r[i],r[i+1] = r[i+1],r[i]
-	}
-	newHead := &ListNode{Val:s[0]}
-	node := newHead
-	for _, value := range s[1:] {
-		node.Next = &ListNode{Val:value}
-		node = node.Next
-	}
-	return newHead
+	return dummy.Next
 }
