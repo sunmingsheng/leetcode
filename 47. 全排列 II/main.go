@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 //给定一个可包含重复数字的序列，返回所有不重复的全排列。
 //
@@ -19,33 +22,31 @@ import "fmt"
 //著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 func main() {
-	temp := make([]int, 0)
-	temp = append(temp, 1)
-	fmt.Println(temp)
-	//fmt.Println(permuteUnique([]int{1,1,2}))
+	// 1 1 1 2 2
+	fmt.Println(permuteUnique([]int{1,1,1,2}))
 }
 
 func permuteUnique(nums []int) [][]int {
 	results := [][]int{}
 	result := []int{}
-	helper(nums, result, &results)
+	sort.Ints(nums)
+	dfs(nums, &results, result)
 	return results
 }
 
-func helper(nums []int, result []int, results *[][]int) {
-	if len(nums) == 0 {
+func dfs(nums []int, results *[][]int, result []int) {
+	if len(nums) <= 0 {
 		*results = append(*results, result)
 		return
 	}
-	keys := make(map[int]struct{})
 	for key, value := range nums {
-		if _, ok := keys[value]; ok {
+		if key > 0 && nums[key - 1] == value {
 			continue
 		}
-		temp := make([]int, key)
-		copy(temp, nums[:key])
-		temp = append(temp, nums[key+1:]...)
-		helper(temp, append(result, value), results)
-		keys[value] = struct{}{}
+		data := append([]int{}, nums[0:key]...)
+		data = append(data, nums[key + 1:]...)
+		dfs(data, results, append(result, value))
 	}
 }
+
+

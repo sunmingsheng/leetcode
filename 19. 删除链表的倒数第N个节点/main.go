@@ -6,7 +6,7 @@ import "fmt"
 //
 //示例：
 //
-//给定一个链表: 1->2->3->4->5, 和 n = 2.
+//给定一个链表:  1->2->3->4->5, 和 n = 2.
 //
 //当删除了倒数第二个节点后，链表变为 1->2->3->5.
 //说明：
@@ -23,22 +23,26 @@ type ListNode19 struct {
 }
 
 func main() {
-	head := &ListNode19{Val:1, Next:nil}
-	fmt.Println(removeNthFromEnd(head, 1))
+	head := &ListNode19{Val:1, Next:&ListNode19{Val:2,Next:&ListNode19{3, &ListNode19{Val:4, Next:&ListNode19{Val:5}}}}}
+	head = removeNthFromEnd(head, 2)
+	fmt.Println(head)
+	fmt.Println(head.Next)
+	fmt.Println(head.Next.Next)
+	fmt.Println(head.Next.Next.Next)
 }
 
+//0-->1->2->3->4->5
 func removeNthFromEnd(head *ListNode19, n int) *ListNode19 {
-	oriHead := head
-	s := []*ListNode19{}
-	for head != nil {
-		s = append(s, head)
-		head = head.Next
+	dummyHead := &ListNode19{}
+	dummyHead.Next = head
+	l1, l2 := dummyHead, dummyHead
+	for i := 0; i <= n; i++ {
+		l1 = l1.Next
 	}
-	if len(s) <= n {
-		return oriHead.Next
-	} else {
-		s[len(s) - n - 1].Next = s[len(s) - n].Next
-		s[len(s) - n].Next = nil
+	for l1 != nil {
+		l1 = l1.Next
+		l2 = l2.Next
 	}
-	return oriHead
+	l2.Next = l2.Next.Next
+	return dummyHead.Next
 }
