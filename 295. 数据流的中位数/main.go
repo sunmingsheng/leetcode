@@ -2,8 +2,6 @@ package main
 
 import (
 	"container/heap"
-	"fmt"
-	"sort"
 )
 
 //中位数是有序列表中间的数。如果列表长度是偶数，中位数则是中间两个数的平均值。
@@ -35,69 +33,69 @@ import (
 //链接：https://leetcode-cn.com/problems/find-median-from-data-stream
 //著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
-
-type PriorityQueue []int
-
-func (pq *PriorityQueue) Len() int {
-	return len(*pq)
-}
-
-func (pq *PriorityQueue) Less(i, j int) bool {
-	return (*pq)[i] > (*pq)[j]
-}
-
-func (pq *PriorityQueue) Swap(i, j int) {
-	(*pq)[i], (*pq)[j] = (*pq)[j], (*pq)[i]
-}
-
-func (pq *PriorityQueue) Pop() interface{} {
-	temp := (*pq)[len(*pq) - 1]
-	*pq = (*pq)[:len(*pq)-1]
-	return temp
-}
-
-func (pq *PriorityQueue) Push(item interface{})  {
-	*pq = append(*pq, item.(int))
-}
-
 type MedianFinder struct {
-	length int
-	data []int
+	minHeap *heapMin
+	maxHeap *heapMin
+}
+
+type heapMin []int
+
+func (h heapMin) Len() int {
+	return len(h)
+}
+
+func (h heapMin) Less(i,j int) bool {
+	return h[i] < h[j]
+}
+
+func (h *heapMin) Push(x interface{}) {
+	*h = append(*h,x.(int))
+}
+
+func (h *heapMin) Pop() interface{} {
+	tmp := (*h)[len(*h)-1]
+	*h = (*h)[:len(*h)-1]
+	return tmp
+}
+
+func (h *heapMin) Swap(i,j int) {
+	(*h)[i],(*h)[j] = (*h)[j],(*h)[i]
 }
 
 func Constructor() MedianFinder {
 	return MedianFinder{
-		length: 0,
-		data:   []int{},
+		minHeap: new(heapMin),
+		maxHeap: new(heapMin),
 	}
 }
 
 func (this *MedianFinder) AddNum(num int)  {
-	this.data = append(this.data, num)
-	this.length += 1
-}
-
-func (this *MedianFinder) FindMedian() float64 {
-	sort.Ints(this.data)
-	if this.length % 2 == 1 {
-		return float64(this.data[this.length/2])
+	if this.minHeap.Len() > 0 && num > (*this.minHeap)[0] {
+		heap.Push(this.minHeap,num)
 	} else {
-		return float64(this.data[this.length/2] + this.data[this.length/2 - 1]) / 2
+		heap.Push(this.maxHeap,-num)
+	}
+
+	if this.minHeap.Len() - this.maxHeap.Len() == 2 {
+		heap.Push(this.maxHeap,-(heap.Pop(this.minHeap)).(int))
+	} else if this.maxHeap.Len() - this.minHeap.Len() == 2 {
+		heap.Push(this.minHeap,-(heap.Pop(this.maxHeap)).(int))
 	}
 }
 
+func (this *MedianFinder) FindMedian() float64 {
+	if this.minHeap.Len() > this.maxHeap.Len() {
+		return float64((*this.minHeap)[0])
+	} else if this.minHeap.Len() < this.maxHeap.Len() {
+		return -float64((*this.maxHeap)[0])
+	}
+	return float64((*this.minHeap)[0]-(*this.maxHeap)[0])/float64(2)
+}
+
+
+
 
 func main() {
-	pq := &PriorityQueue{}
-	heap.Init(pq)
-
-	heap.Push(pq,1)
-	heap.Push(pq,3)
-	heap.Push(pq,2)
-
-	fmt.Println(heap.Pop(pq))
-	fmt.Println(heap.Pop(pq))
-	fmt.Println(heap.Pop(pq))
 
 
 	//obj := Constructor()
