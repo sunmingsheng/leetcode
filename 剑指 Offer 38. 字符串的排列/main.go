@@ -1,0 +1,54 @@
+package main
+
+import "fmt"
+
+//输入一个字符串，打印出该字符串中字符的所有排列。
+//
+//
+//你可以以任意顺序返回这个字符串数组，但里面不能有重复元素。
+//
+//
+//示例:
+//
+//输入：s = "abc"
+//输出：["abc","acb","bac","bca","cab","cba"]
+// 
+//
+//限制：
+//
+//1 <= s 的长度 <= 8
+//
+//来源：力扣（LeetCode）
+//链接：https://leetcode-cn.com/problems/zi-fu-chuan-de-pai-lie-lcof
+//著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+func main() {
+	//aab
+	//aab aba baa
+	fmt.Println(permutation("abc"))
+}
+
+func permutation(s string) []string {
+	m := make(map[string]struct{})
+	dfs(s,"", m)
+	res := []string{}
+	for key, _ := range m {
+		res = append(res, key)
+	}
+	return res
+}
+
+func dfs(s, temp string, m map[string]struct{}) {
+	if len(s) == 0 {
+		m[temp] = struct{}{}
+		return
+	}
+	has := make(map[string]struct{})
+	for i := 0; i < len(s); i++ {
+		if _, ok := has[s[i:i+1]]; ok {
+			continue
+		}
+		has[s[i:i+1]] = struct{}{}
+		dfs(s[:i] + s[i+1:], temp + s[i:i+1], m)
+	}
+}
