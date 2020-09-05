@@ -31,26 +31,24 @@ import (
 //著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 func main() {
-	fmt.Println(topKFrequent([]int{1,1,1,2,2,3}, 2))
+	fmt.Println(topKFrequent([]int{1,1,1,2,2,3}, 1))
 }
 
-type IntHeap []int
+type IntHeap [][]int
 
 func (h IntHeap) Len() int           { return len(h) }
-func (h IntHeap) Less(i, j int) bool { return h[i] < h[j] }
+func (h IntHeap) Less(i, j int) bool { return h[i][1] > h[j][1] }
 func (h IntHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
 
 func (h *IntHeap) Push(x interface{}) {
-	// Push and Pop use pointer receivers because they modify the slice's length,
-	// not just its contents.
-	*h = append(*h, x.(int))
+	*h = append(*h, x.([]int))
 }
 
 func (h *IntHeap) Pop() interface{} {
 	old := *h
 	n := len(old)
 	x := old[n-1]
-	*h = old[0 : n-1]
+	*h = old[0:n-1]
 	return x
 }
 
@@ -62,5 +60,14 @@ func topKFrequent(nums []int, k int) []int {
 	//大顶堆
 	data := &IntHeap{}
 	heap.Init(data)
-	//heap.Push(data, )
+	for key, value := range m {
+		item := []int{key, value}
+		heap.Push(data, item)
+	}
+	res := make([]int, k)
+	for i := 0; i < k; i++ {
+		item := heap.Pop(data).([]int)
+		res[i] = item[0]
+	}
+	return res
 }

@@ -39,27 +39,50 @@ func main() {
 }
 
 func getPermutation(n int, k int) string {
-	res := []string{}
-	strArr := make([]string, n)
-	for i := 1; i <= n; i++ {
-		strArr[i-1] = strconv.Itoa(i)
+	if n == 1 {
+		return "1"
 	}
-	dfs(strArr, "", &res, k)
-	return res[k-1]
+	arr := []int{}
+	for i := 0; i < n; i++ {
+		arr = append(arr, i+1)
+	}
+	factorialArr := factorial(n - 1)
+	var s string
+	var fun func(n, k int)
+
+	fun = func(n, k int) {
+		f := factorialArr[n-1]
+		sh := k / f
+		yu := k % f
+		var index int
+		if yu == 0 {
+			index = sh - 1
+			yu = k - index*f
+		} else {
+			index = sh
+		}
+		s += strconv.Itoa(arr[index])
+		arr = append(arr[:index], arr[index+1:]...)
+		if len(arr) == 1 {
+			s += strconv.Itoa(arr[0])
+			return
+		}
+		fun(n-1, yu)
+	}
+
+	fun(n, k)
+	return s
 }
 
-func dfs(strArr []string, tmp string,  res *[]string, targetNum int) {
-	if len(strArr) == 0 {
-		*res = append(*res, tmp)
-		return
+func factorial(n int) []int {
+	factorialArr := []int{
+		1,
 	}
-	if len(*res) > targetNum {
-		return
+	facVal := 1
+	for i := 1; i <= n; i++ {
+		facVal *= i
+		factorialArr = append(factorialArr, facVal)
 	}
-	for i := 0; i < len(strArr); i++ {
-		data := make([]string, i)
-		copy(data, strArr[:i])
-		data = append(data, strArr[i+1:]...)
-		dfs(data, tmp + strArr[i], res, targetNum)
-	}
+	return factorialArr
 }
+
