@@ -29,42 +29,58 @@ import "fmt"
 //著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 func main() {
-	fmt.Println(spiralOrder([][]int{{1},{3},{5}}))
+	fmt.Println(spiralOrder([][]int{{1},{2},{3}}))
 }
 
 func spiralOrder(matrix [][]int) []int {
 	var result []int
-	if len(matrix) == 0 {
+	m := len(matrix)
+	if m == 0 {
 		return result
 	}
-	left, right, up, down := 0, len(matrix[0])-1, 0, len(matrix)-1
-
-	var x, y int
-	for left <= right && up <= down {
-		for y = left; y <= right && avoid(left, right, up, down); y++ {
-			result = append(result, matrix[x][y])
-		}
-		y--
-		up++
-		for x = up; x <= down && avoid(left, right, up, down); x++ {
-			result = append(result, matrix[x][y])
-		}
-		x--
-		right--
-		for y = right; y >= left && avoid(left, right, up, down); y-- {
-			result = append(result, matrix[x][y])
-		}
-		y++
-		down--
-		for x = down; x >= up && avoid(left, right, up, down); x-- {
-			result = append(result, matrix[x][y])
-		}
-		x++
-		left++
+	n := len(matrix[0])
+	if n == 0 {
+		return result
 	}
-	return result
-}
-
-func avoid(left, right, up, down int) bool {
-	return up <= down && left <= right
+    up, bottom, left, right := 0, m-1, 0, n-1
+    direct := "right"
+    for up <= bottom && left <= right {
+    	//右
+    	if direct == "right" {
+    		for i:= left; i <= right; i++ {
+    			result = append(result, matrix[up][i])
+			}
+    		direct = "bottom"
+    		up++
+    		continue
+		}
+    	//下
+		if direct == "bottom" {
+			for i:= up; i <= bottom; i++ {
+				result = append(result, matrix[i][right])
+			}
+			direct = "left"
+			right--
+			continue
+		}
+    	//左
+		if direct == "left" {
+			for i:= right; i >= left; i-- {
+				result = append(result, matrix[bottom][i])
+			}
+			direct = "up"
+			bottom--
+			continue
+		}
+    	//上
+		if direct == "up" {
+			for i:= bottom; i >= up; i-- {
+				result = append(result, matrix[i][left])
+			}
+			direct = "right"
+			left++
+			continue
+		}
+	}
+	return  result
 }

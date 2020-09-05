@@ -1,10 +1,5 @@
 package main
 
-import (
-	"fmt"
-	"time"
-)
-
 //给定一个包含了一些 0 和 1 的非空二维数组 grid 。
 //
 //一个 岛屿 是由一些相邻的 1 (代表土地) 构成的组合，这里的「相邻」要求两个 1 必须在水平或者竖直方向上相邻。你可以假设 grid 的四个边缘都被 0（代表水）包围着。
@@ -35,15 +30,41 @@ import (
 //著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 func main() {
-	println(time.Now().UnixNano())
-	temp := 0
-	for i :=0 ; i < 100000; i++ {
-		temp = i
-	}
-	fmt.Println(temp)
-	println(time.Now().UnixNano())
+
 }
 
-//func maxAreaOfIsland(grid [][]int) int {
-//
-//}
+func maxAreaOfIsland(grid [][]int) int {
+	m := len(grid)
+	if m <= 0 {
+		return 0
+	}
+	n := len(grid[0])
+	if n <= 0 {
+		return 0
+	}
+	res := 0
+	for i := 0; i < m; i++ {
+		for j := 0; j < n; j++ {
+			if grid[i][j] == 1 {
+				area := dfs(grid, m, n, i, j)
+				if area > res {
+					res = area
+				}
+			}
+		}
+	}
+	return res
+}
+
+func dfs(grid [][]int, m, n, i, j int) int {
+	if i < 0 || i > m - 1 || j < 0 || j > n - 1 || grid[i][j] == 0 {
+		return 0
+	}
+	grid[i][j] = 0
+	count := 1
+	count += dfs(grid, m, n, i-1, j)
+	count += dfs(grid, m, n, i+1, j)
+	count += dfs(grid, m, n, i, j-1)
+	count += dfs(grid, m, n, i, j+1)
+	return count
+}

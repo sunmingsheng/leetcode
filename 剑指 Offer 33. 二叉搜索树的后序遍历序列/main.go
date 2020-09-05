@@ -32,15 +32,33 @@ import "fmt"
 //著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 func main() {
-	fmt.Println(verifyPostorder([]int{4, 8, 6, 12, 16, 14, 10}))
+	fmt.Println(verifyPostorder([]int{4,6,7,5}))
 }
 
 func verifyPostorder(postorder []int) bool {
-	length := len(postorder)
-	if length <= 1 {
+	if len(postorder) == 0 {
 		return true
 	}
+	return dfs(postorder)
+}
 
+func dfs(postorder []int) bool {
+	if len(postorder) <= 1 {
+		return true
+	}
+	k := 0
+	root := postorder[len(postorder)-1]
+	for i := 0; i < len(postorder) - 1; i++ {
+		if postorder[i] < root {
+			k ++
+		}
+	}
+	for j := k; j < len(postorder) - 1; j++ {
+		if postorder[j] < root {
+			return false
+		}
+	}
+	return dfs(postorder[:k]) && dfs(postorder[k:len(postorder)-1])
 }
 
 
