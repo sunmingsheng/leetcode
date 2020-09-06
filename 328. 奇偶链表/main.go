@@ -26,6 +26,23 @@ func main() {
 
 }
 
+//1->2->3->4->5->NULL
 func oddEvenList(head *ListNode) *ListNode {
-
+	if head == nil {
+		return head
+	}
+	if head.Next == nil {
+		return head
+	}
+	even := head
+	odd := head.Next
+	oddHead := head.Next
+	for odd != nil && odd.Next != nil {
+		even.Next = even.Next.Next
+		even = even.Next
+		odd.Next = odd.Next.Next
+		odd = odd.Next
+	}
+	even.Next = oddHead
+	return head
 }

@@ -47,15 +47,18 @@ func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 	if root == nil {
 		return nil
 	}
+	//检查根节点是否为公共节点
 	if root.Val == p.Val || root.Val == q.Val {
 		return root
 	}
-	left := lowestCommonAncestor(root.Left, p, q)
+	//检查右节点是否为公共节点
 	right := lowestCommonAncestor(root.Right, p, q)
-	if left != nil && right != nil {
+	//检查左节点是否为公共节点
+	left := lowestCommonAncestor(root.Left, p, q)
+	if right != nil && left != nil {
 		return root
 	}
-	if left == nil {
+	if right != nil {
 		return right
 	}
 	return left

@@ -35,35 +35,27 @@ func main() {
 	fmt.Println(levelOrderBottom(root))
 }
 
-
 func levelOrderBottom(root *TreeNode) [][]int {
 	s := [][]int{}
 	if root == nil {
 		return s
 	}
 	m := make(map[int][]int)
-	print(root, 1, &m)
-	maxLevel := 1
-	for key, _ := range m {
-		if key > maxLevel {
-			maxLevel = key
-		}
-	}
-	for i := maxLevel; i >= 1; i-- {
+	traversal(root, 0, m)
+	for i := len(m)-1; i >= 0; i-- {
 		s = append(s, m[i])
 	}
 	return s
 }
 
-func print(node *TreeNode, level int, m *map[int][]int) {
+func traversal(node *TreeNode, level int, m map[int][]int) {
 	if node == nil {
 		return
 	}
-	if s, ok := (*m)[level]; ok {
-		(*m)[level] = append(s, node.Val)
-	} else {
-		(*m)[level] = []int{node.Val}
+	if _, ok := m[level]; !ok {
+		m[level] = []int{}
 	}
-	print(node.Left, level + 1, m)
-	print(node.Right, level + 1, m)
+	m[level] = append(m[level], node.Val)
+	traversal(node.Left, level + 1, m)
+	traversal(node.Right, level + 1, m)
 }
