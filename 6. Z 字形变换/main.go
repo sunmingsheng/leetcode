@@ -32,31 +32,37 @@ import "fmt"
 //来源：力扣（LeetCode）
 //链接：https://leetcode-cn.com/problems/zigzag-conversion
 //著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
-
 func main()  {
-	fmt.Println(convert("ABC", 2))
+	fmt.Println(convert("LEETCODEISHIRING", 3))
 }
 
 func convert(s string, numRows int) string {
-	if numRows == 1 {
+	if numRows <= 1 {
 		return s
 	}
-	data := make([][]string, numRows)
-	for key, _ := range data {
-		data[key] = []string{}
+    c := [][]string{}
+    for i := 0; i < numRows; i++ {
+    	c = append(c, []string{})
 	}
+    j := 0
+	index := 0
 	for i := 0; i < len(s); i++ {
-		res := i % (numRows * 2 - 2)
-		if res >= numRows {
-			res = numRows - (res - numRows + 1) - 1
+		j ++
+		if j > (2 * numRows - 2) {
+			j = 1
 		}
-		data[res] = append(data[res], s[i:i+1])
+		if j > numRows {
+			index = numRows - (j - numRows) - 1
+		} else {
+			index = j - 1
+		}
+		c[index] = append(c[index], string(s[i]))
 	}
-	str := ""
-	for i := 0; i < len(data); i++ {
-		for j := 0; j < len(data[i]); j++ {
-			str += data[i][j]
+	res := ""
+	for i := 0; i < numRows; i++ {
+		for j := 0; j < len(c[i]); j++ {
+			res += c[i][j]
 		}
 	}
-	return str
+	return res
 }

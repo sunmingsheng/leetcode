@@ -28,42 +28,42 @@ import (
 //著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 func main() {
-	fmt.Println(reverse(120))
+	fmt.Println(reverse(-120))
 }
 
 func reverse(x int) int {
 	if x == 0 {
-		return 0
+		return x
 	}
-	flag := true
-	if x < 0 {
-		flag = false
-		x = 0 - x
+    flag := false
+    if x < 0 {
+    	flag = true
+    	x = 0 - x
 	}
+	c := 10
 	data := []int{}
-	i := 1
 	for {
-		if x < int(math.Pow10(i-1)) {
+		if x <= 0 {
 			break
 		}
-		res := x % int(math.Pow10(i)) / int(math.Pow10(i-1))
-		data = append(data, res)
-		x -= res
-		i++
+		tmp := x % c
+		data = append(data, tmp * 10 / c)
+		x = x - tmp
+		c = c * 10
 	}
-	res := 0
-	length := len(data)
-	for key, value := range data {
-		res += value * int(math.Pow10(length - key - 1))
+	val := 0
+	for i := 0; i < len(data); i++ {
+		val = val * 10 + data[i]
 	}
-	if !flag {
-		res = 0 - res
+	if flag {
+		val = 0 - val
+		if val < math.MinInt32 {
+			return 0
+		}
+	} else {
+		if val > math.MaxInt32 {
+			return 0
+		}
 	}
-	if res > math.MaxInt32 {
-		return 0
-	}
-	if res < math.MinInt32 {
-		return 0
-	}
-	return res
+	return val
 }

@@ -3,8 +3,8 @@ package main
 import "fmt"
 
 func main() {
-	n := 5
-	k := 4
+	n := 4
+	k := 2
 	results := combine(n, k)
 	for _, value := range results {
 		fmt.Println(value)
@@ -23,21 +23,18 @@ func combine(n int, k int) [][]int {
 	results := [][]int{}
 	result := []int{}
 	//回溯数据
-	back77(nums, k, result, &results)
+	dfs(nums, 0, k, result, &results)
 	return results
 }
 
-func back77(nums []int, n int, result []int, results *[][]int) {
-	if len(result) == n {
+func dfs(nums []int, index int, k int,  result []int, results *[][]int) {
+	if len(result) == k {
 		*results = append(*results, result)
 		return
 	}
-	for key, value := range nums {
-		temp := make([]int, len(nums) - key - 1)
-		copy(temp, nums[key + 1:])
-		tempResult := make([]int, len(result))
-		copy(tempResult, result)
-		tempResult = append(tempResult, value)
-		back77(temp, n, tempResult, results)
+	for i := index; i < len(nums); i++ {
+		temp := make([]int, len(result))
+		copy(temp, result)
+		dfs(nums, i + 1, k, append(temp, nums[i]), results)
 	}
 }

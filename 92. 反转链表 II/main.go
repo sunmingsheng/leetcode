@@ -25,5 +25,15 @@ func main() {
 }
 
 func reverseBetween(head *ListNode, m int, n int) *ListNode {
-
+	var middle *ListNode
+	var tail *ListNode
+	current := head
+	i := 1
+	for current != nil {
+		if i == m {
+			
+		}
+		i +=1
+		current = current.Next
+	}
 }

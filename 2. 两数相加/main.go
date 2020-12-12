@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 //给出两个 非空 的链表用来表示两个非负的整数。其中，它们各自的位数是按照 逆序 的方式存储的，并且它们的每个节点只能存储 一位 数字。
 //
 //如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。
@@ -22,32 +24,71 @@ type ListNode struct {
 }
 
 func main() {
+    l1 := &ListNode{Val:2, Next:&ListNode{Val:4}}
+	l2 := &ListNode{Val:5, Next:&ListNode{Val:6, Next:&ListNode{Val:4}}}
+	res := addTwoNumbers(l1, l2)
+	printList(res)
+}
 
+func printList(node *ListNode) {
+	for {
+		if node == nil {
+			break
+		}
+		fmt.Println(node.Val)
+		node = node.Next
+	}
 }
 
 func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
-	dummy := &ListNode{}
-	curry := dummy
-	lastVal := 0
-	for l1 != nil || l2 != nil {
-		value := 0
-		if l1 != nil {
-			value += l1.Val
+	if l1 == nil {
+		return l2
+	}
+	if l2 == nil {
+		return l1
+	}
+	prev := &ListNode{}
+	s := prev
+	nextVal := 0
+	for {
+		val := 0
+		if l1 == nil && l2 == nil {
+			break
+		} else if l1 == nil || l2 == nil {
+			if l1 != nil {
+				val = l1.Val
+			} 
+			if l2 != nil {
+				val = l2.Val
+			}
+			val += nextVal
+			if val >= 10 {
+				nextVal = 1
+				val = val - 10
+			} else {
+				nextVal = 0
+			}
+			s.Next = &ListNode{Val: val}
+			s = s.Next
+			if l1 != nil {
+				l1 = l1.Next
+			}
+			if l2 != nil {
+				l2 = l2.Next
+			}
+		} else {
+			val = l1.Val + l2.Val + nextVal
+			if val >= 10 {
+				nextVal = 1
+				val = val - 10
+			} else {
+				nextVal = 0
+			}
+			s.Next = &ListNode{Val: val}
+			s = s.Next
 			l1 = l1.Next
-		}
-		if l2 != nil {
-			value += l2.Val
 			l2 = l2.Next
 		}
-		value += lastVal
-		curry.Next = &ListNode{
-			Val: value % 10,
-		}
-		lastVal = value / 10
-		curry = curry.Next
 	}
-	if lastVal > 0 {
-		curry.Next = &ListNode{Val:lastVal}
-	}
-	return dummy.Next
+	return prev.Next
 }

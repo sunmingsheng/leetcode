@@ -24,32 +24,5 @@ func main() {
 }
 
 func longestPalindrome(s string) string {
-	length := len(s)
-	if length < 2 {
-		return s
-	}
-	start := 0
-	maxLength := 1
-	for i := 0; i < len(s); i++ {
-		helper(s, i - 1, i + 1, &start, &maxLength)
-		helper(s, i, i + 1, &start, &maxLength)
-	}
-	return s[start:start + maxLength]
-}
 
-func helper(s string, left , right int, start, maxLength *int) {
-	for {
-		if left < 0 || right >= len(s) {
-			return
-		}
-		if s[left] != s[right] {
-			return
-		}
-		if right - left + 1 > *maxLength {
-			*maxLength = right - left + 1
-			*start = left
-		}
-		left--
-		right++
-	}
 }

@@ -36,27 +36,31 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
+//[3,5,1,6,2,0,8,null,null,7,4]
+//
 func main() {
-	left := &TreeNode{Val:2}
+	left := &TreeNode{Val:1}
 	right := &TreeNode{Val:3}
-	root := &TreeNode{Val:1, Left:left, Right:right}
+	root := &TreeNode{Val:2, Left:left, Right:right}
 	fmt.Println(lowestCommonAncestor(root, left, right))
 }
+
 
 func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 	if root == nil {
 		return nil
 	}
-	if root.Val == p.Val || root.Val == q.Val {
+	if p.Val == root.Val || q.Val == root.Val {
 		return root
 	}
-	left := lowestCommonAncestor(root.Left, p, q)
-	right := lowestCommonAncestor(root.Right, p, q)
-	if left != nil && right != nil {
+	if p.Val < root.Val && q.Val > root.Val {
 		return root
 	}
-	if left == nil {
-		return right
+	if p.Val > root.Val && q.Val < root.Val {
+		return root
 	}
-	return left
+	if p.Val < root.Val && q.Val < root.Val {
+		return lowestCommonAncestor(root.Left, p, q)
+	}
+	return lowestCommonAncestor(root.Right, p, q)
 }

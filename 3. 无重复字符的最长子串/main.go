@@ -25,33 +25,36 @@ import (
 
 func main() {
 	//abcdbcbb
-	fmt.Println(lengthOfLongestSubstring("pwwkew1"))
+	fmt.Println(lengthOfLongestSubstring("abcdbcbb"))
 }
 
-//窗口滑动法
 func lengthOfLongestSubstring(s string) int {
 	length := len(s)
 	if length <= 1 {
 		return length
 	}
-	i, j, maxlength, m := 0, 0, 0, make(map[string]struct{})
-	for ; i < length; i++ {
-		if _, ok := m[s[i:i+1]]; !ok {
-			if i-j+1 > maxlength {
-				maxlength = i - j + 1
-			}
-			m[s[i:i+1]] = struct{}{}
-		} else {
-			for {
-				if _, ok := m[s[i:i+1]]; !ok {
-					break
-				}
-				delete(m, s[j:j+1])
-				j++
-			}
-			m[s[i:i+1]] = struct{}{}
+	i := 0
+	j := 1
+	res := 1
+	for {
+		if j >= length {
+			break
 		}
+		for z := i; z < j; z++ {
+			if s[j] == s[z] {
+				if j - i > res {
+					res = j - i
+				}
+				i = z + 1
+				break
+			} else {
+				if j - i > res {
+					res = j - i
+				}
+			}
+		}
+		j++
 	}
-	return maxlength
+	return res
 }
 
