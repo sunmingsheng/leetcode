@@ -26,6 +26,7 @@ func main() {
 	fmt.Println(result)
 	fmt.Println(result.Next)
 	fmt.Println(result.Next.Next)
+	fmt.Println(result.Next.Next.Next)
 }
 
 //0 1 2 3 4
@@ -33,18 +34,15 @@ func swapPairs(head *ListNode) *ListNode {
 	if head == nil {
 		return head
 	}
-	dummy := &ListNode{Next:head}
-	curr  := dummy
-	for {
-		if curr.Next == nil || curr.Next.Next == nil {
-			break
-		}
-		l1 := curr.Next
-		l2 := curr.Next.Next
-		l1.Next = l2.Next
-		l2.Next = l1
-		curr.Next = l2
-		curr = l1
+	l := head
+	m := head.Next
+	if m == nil {
+		return l
 	}
-	return dummy.Next
+	r := m.Next
+	//交换l和m
+	m.Next = l
+	//递归处理
+	l.Next = swapPairs(r)
+	return m
 }

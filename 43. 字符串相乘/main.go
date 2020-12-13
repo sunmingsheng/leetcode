@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 )
 
 //给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。
@@ -27,17 +26,46 @@ import (
 //著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 func main() {
-	fmt.Println(multiply("12", "34"))
+	fmt.Println(multiply("99", "99"))
 }
 
-func multiply(num1 string, num2 string) string {
-	rune1 := []rune(num1)
-	int2, _ := strconv.Atoi(num2)
 
-	results := 0
-	for i := len(rune1) - 1; i >= 0; i-- {
-		intTemp, _ := strconv.Atoi(string(rune1[i]))
-		results += intTemp * int2 * 1
+// i + j
+//   12
+//   34
+//    8
+//   4
+// 3 6
+// 4 0 8
+
+func multiply(num1 string, num2 string) string {
+	l1 := len(num1)
+	l2 := len(num2)
+	data := make([]int, l1 + l2)
+	for i := 0; i < l1; i++ {
+		for j := 0; j < l2; j++ {
+			index := i + j + 1
+			data[index] += int(num1[i] - '0') * int(num2[j] - '0')
+		}
 	}
-	return strconv.Itoa(results)
+	for i := l1 + l2 - 1; i >= 1; i-- {
+		tmp := data[i]
+		data[i] = tmp % 10
+		data[i-1] += tmp / 10
+	}
+	res := []byte{}
+	start := 0
+	for i := 0; i < l1+l2; i++ {
+		if data[i] != 0 {
+			break
+		}
+		start = i + 1
+	}
+	for i := start; i < l1+l2; i++ {
+		res = append(res, byte(data[i]) + '0')
+	}
+	if len(res) == 0 {
+		return "0"
+	}
+	return string(res)
 }

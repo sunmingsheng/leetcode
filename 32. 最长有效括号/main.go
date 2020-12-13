@@ -20,32 +20,34 @@ import "fmt"
 //著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 func main() {
-	fmt.Println(longestValidParentheses("()(())"))
+	fmt.Println(longestValidParentheses("(()"))
 }
 
 func longestValidParentheses(s string) int {
+	length := len(s)
+	if length <= 1 {
+		return length
+	}
+	dp := make([]int,length)
+	//()(()) i = 2 j = 5
+	//dp[i] = dp[i-1] + 2 + 上个元素的dp值
+	//i - dp[i-1] - 1
+	//i - dp[i-1] - 2
 	max := 0
-	stack := []int{}
-	stack = append(stack, -1)
-	for i := 0; i < len(s); i++ {
-		if s[i] == '(' {
-			stack = append(stack, i)
-		} else {
-			stack = stack[:len(stack)-1]
-			if len(stack) == 0 {
-				stack = append(stack, i)
-			} else {
-				max = getMax(max, i - stack[len(stack)-1])
+	for i := 1; i < length; i++ {
+		if s[i] == ')' {
+			if s[i - dp[i-1] - 1] == '(' {
+				dp[i] = dp[i-1] + 2
+				if i - dp[i-1] - 2 >= 0 {
+					dp[i] += dp[i - dp[i-1] - 2]
+				}
+			}
+			if dp[i] > max {
+				max = dp[i]
 			}
 		}
 	}
 	return max
 }
 
-func getMax(x, y int) int {
-	if x > y {
-		return x
-	}
-	return y
-}
 
